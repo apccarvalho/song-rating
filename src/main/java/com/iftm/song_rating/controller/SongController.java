@@ -26,7 +26,7 @@ public class SongController {
 	@GetMapping("/song/create")
 	public String create(Model model) {
 		model.addAttribute("song", new Song());
-		return "product/create";
+		return "song/create";
 	}
 	
 	@PostMapping("/song/save")
