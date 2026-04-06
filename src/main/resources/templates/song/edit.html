@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1" />
+<title>Editar Músicas</title>
+
+<link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous"
+/>
+</head>
+<body>
+<div class="container">
+    <h1>Editar Músicas</h1>
+    <form action="#" th:action="@{/song/save}" th:object="${song}" method="POST">
+
+       <!-- Campo necessário para que o save saiba que não estamos criando, mas editando uma música -->
+       <input type="hidden" th:field="*{id}" />
+       <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Nome</label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{name}" class="form-control" id="name" name="name" placeholder="Digite o nome da música">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="artist">Artista:</label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{artist}" class="form-control" id="artist" name="artist" placeholder="Digite o artista/banda">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="genre">Gênero:</label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{genre}" class="form-control" id="genre" name="genre" placeholder="Digite o gênero da música">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="duration">Duração:</label>
+            <div class="col-sm-10">
+                <input type="number" th:field="*{duration}" class="form-control" id="duration" name="duration"
+                    placeholder="Digite o tempo de duração da música. Ex 3.4">
+            </div>
+        </div>
+                <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="rate">Classificação:</label>
+            <div class="col-sm-10">
+                <input type="number" th:field="*{rate}" class="form-control" id="rate" name="rate"
+                    placeholder="Digite a classificação da música. 0 = péssima. 5 = perfeita">
+            </div>
+        </div>
+ 
+        <button type="submit" class="btn btn-info col-2"> Salvar Música</button>
+    </form>
+</div>
+</body>
+</html>
