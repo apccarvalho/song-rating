@@ -3,6 +3,7 @@ package com.iftm.song_rating.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.iftm.song_rating.model.Song;
 import com.iftm.song_rating.service.SongService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class SongController {
@@ -30,9 +33,20 @@ public class SongController {
 	}
 	
 	@PostMapping("/song/save")
-	public String postMethodName(@ModelAttribute("song") Song song){
-		songService.saveSong(song);
-		return "redirect:/song";
+    public String save(@ModelAttribute @Valid Song song, BindingResult result, Model model) {
+
+        System.out.println(song);
+        if (result.hasErrors()) {
+            model.addAttribute("song", song);
+                    
+            if (song.getId() != null) {
+            	return "song/edit";
+            }
+            return "song/create"; 
+        }
+
+        songService.saveSong(song);
+        return "redirect:/song";
 	}
 	
 	@GetMapping("/song/delete/{id}")
