@@ -6,6 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "songs")
@@ -15,18 +19,26 @@ public class Song {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Size(min = 3, max = 50, message= "Nome deve conter pelo menos 3 caracteres")
+    @NotBlank(message= "Nome é um campo obrigatório")
     @Column(name = "name", nullable = false)
     private String name;
     
+    @NotBlank(message= "Artista é um campo obrigatório")
     @Column(name = "artist", nullable = false)
     private String artist;
     
+    @NotBlank(message= "Gênero é um campo obrigatório")
     @Column(name = "genre", nullable = false)
     private String genre;
     
+    @Min(value = 0, message = "O tempo não pode ser negativo")
+    @NotNull(message= "Informe um tempo válido")
     @Column(name = "duration", nullable = false)
     private Float duration;
     
+    @Min(value = 0, message = "A nota não pode ser negativa")
+    @NotNull(message= "Informe uma nota válida")
     @Column(name = "rate", nullable = false)
     private Integer rate;
 
