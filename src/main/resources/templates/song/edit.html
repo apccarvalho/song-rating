@@ -11,7 +11,7 @@
 <th:block th:replace="~{/../fragments/head :: header}"></th:block>
 
 <div class="container">
-    <h1>Editar Músicas</h1>
+    <h1 id="content-wrapper">Editar Músicas</h1>
     <form action="#" th:action="@{/song/save}" th:object="${song}" method="POST">
 
        <!-- Campo necessário para que o save saiba que não estamos criando, mas editando uma música -->

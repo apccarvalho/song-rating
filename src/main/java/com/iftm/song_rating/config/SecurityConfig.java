@@ -25,23 +25,20 @@ public class SecurityConfig {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/home", "/register", "/saveUser").permitAll()
-                .anyRequest().authenticated())
-                .formLogin(login -> login
-                        .defaultSuccessUrl("/product", true))
-                .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")))
-                .exceptionHandling(handling -> handling
-                        .accessDeniedPage("/accessDenied"))
-                .authenticationProvider(authenticationProvider());
-
-        return http.build();
-
-    }
+	  @Bean public SecurityFilterChain filterChain(HttpSecurity http) throws
+	  Exception {
+	  
+	  http.authorizeHttpRequests(requests -> requests .requestMatchers("/home",
+	  "/register", "/saveUser").permitAll() .anyRequest().authenticated())
+	  .formLogin(login -> login .defaultSuccessUrl("/product", true))
+	  .logout(logout -> logout .logoutRequestMatcher(new
+	  AntPathRequestMatcher("/logout"))) .exceptionHandling(handling -> handling
+	  .accessDeniedPage("/accessDenied"))
+	  .authenticationProvider(authenticationProvider());
+	  
+	  return http.build();
+	  
+	  }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
