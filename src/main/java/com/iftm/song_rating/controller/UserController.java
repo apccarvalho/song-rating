@@ -34,7 +34,7 @@ public class UserController {
 	
 	@GetMapping("/accesDenied")
 	public String getAccersDeniedPage() {
-		return "user/accersDeniedPage";
+		return "user/accessDeniedPage";
 	}
 	
 	
