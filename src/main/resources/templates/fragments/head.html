@@ -34,16 +34,21 @@
           <div class="dropdown-menu" aria-labelledby="musicasDropdown">
             <a class="dropdown-item" th:href="@{/song}">Listar músicas</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" th:href="@{/song/create}">Cadastrar música</a>
+            <a sec:authorize="hasAuthority('Admin')" class="dropdown-item" th:href="@{/song/create}">Cadastrar</a>
           </div>
         </li>
       </ul>
+      
+		<ul class="navbar-nav ml-auto">
+		    <li class="nav-item">
+		        <form th:action="@{/logout}" method="post" class="form-inline">
+		            <button type="submit" class="nav-link nav-logout" style="border: none; cursor: pointer;">
+		                Sair
+		            </button>
+		        </form>
+		    </li>
+		</ul>
 
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link nav-logout" th:href="@{/logout}">Sair</a>
-        </li>
-      </ul>
     </div>
 
   </div>

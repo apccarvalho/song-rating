@@ -40,8 +40,13 @@
           </tr>
         </tbody>
       </table>
+      <div class="row">
+      		<a th:href="@{/song/create}">
+          	<button sec:authorize="hasAuthority('Admin')" class="btn btn-primary">Cadastrar Música</button>
+        	</a>
+      </div>
     </div>
-    
+    <br><br>
     <th:block th:replace="~{/../fragments/footer :: footer}"></th:block>
     
   </body>

@@ -44,7 +44,7 @@
             <div class="col-sm-10">
                 <input type="number" th:field="*{rate}" class="form-control" id="rate" name="rate"
                     placeholder="Digite a classificação da música. 0 = péssima. 5 = perfeita">
-                    <p th:if="${#fields.hasErrors('rate')}" th:errorclass="text-danger" th:errors="rate" />
+                    <p th:if="${#fields.hasErrors('rate')}" th:errorclass="text-danger" th:errors="*{rate}" />
             </div>
         </div>
         <button type="submit" class="btn btn-info col-2"> Cadastrar Música</button>        
