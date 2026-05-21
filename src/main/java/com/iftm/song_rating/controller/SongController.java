@@ -1,67 +1,97 @@
 package com.iftm.song_rating.controller;
 
+import java.net.URI;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.iftm.song_rating.model.Song;
 import com.iftm.song_rating.service.SongService;
-
 import jakarta.validation.Valid;
 
-@Controller
+@RestController
+@RequestMapping("/api/songs") // Rota padrão REST no plural para recursos
 public class SongController {
-	
-	@Autowired
-	private SongService songService;
-	
-	@GetMapping("/song")
-	public String index (Model model) {
-		model.addAttribute("songsList", songService.getAllSongs());
-		return "song/index";
-	}
-	
-	@GetMapping("/song/create")
-	public String create(Model model) {
-		model.addAttribute("song", new Song());
-		return "song/create";
-	}
-	
-	@PostMapping("/song/save")
-    public String save(@ModelAttribute @Valid Song song, BindingResult result, Model model) {
 
-        System.out.println(song);
-        if (result.hasErrors()) {
-            model.addAttribute("song", song);
-                    
-            if (song.getId() != null) {
-            	return "song/edit";
-            }
-            return "song/create"; 
+    @Autowired
+    private SongService songService;
+
+
+    @GetMapping
+    public ResponseEntity<List<Song>> getAllSongs() {
+        List<Song> songs = songService.getAllSongs();
+        return ResponseEntity.ok(songs);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Song> getSongById(@PathVariable Long id) {
+        try {
+            Song song = songService.getSongById(id);
+            return ResponseEntity.ok(song);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
+    }
 
+
+    @PostMapping
+    public ResponseEntity<?> createSong(@Valid @RequestBody Song song, BindingResult result) {
+        if (result.hasErrors()) {
+
+            return ResponseEntity.badRequest().body(result.getAllErrors());
+        }
+        
         songService.saveSong(song);
-        return "redirect:/song";
-	}
-	
-	@GetMapping("/song/delete/{id}")
-	public String delete(@PathVariable Long id) {
-		this.songService.deleteSongById(id);
-		return "redirect:/song";
-	}
-	
-	@GetMapping("/song/edit/{id}")
-	public String edit(@PathVariable Long id, Model model) {
-		Song song = songService.getSongById(id);
-		model.addAttribute("song", song);
-		return "song/edit";
-	}
-	
-	
-	
+
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(song.getId())
+                .toUri();
+
+
+        return ResponseEntity.created(location).body(song);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateSong(@PathVariable Long id, @Valid @RequestBody Song songDetails, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getAllErrors());
+        }
+        try {
+
+            songDetails.setId(id);
+            songService.saveSong(songDetails);
+            
+            return ResponseEntity.ok(songDetails);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
+        try {           
+            songService.deleteSongById(id);
+            
+
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
